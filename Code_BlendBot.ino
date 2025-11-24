@@ -8,7 +8,7 @@ Adafruit_TCS34725 colorSensor = Adafruit_TCS34725(
     TCS34725_GAIN_4X
 );
 
-// LCD Display
+
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 
@@ -47,7 +47,7 @@ if (!colorSensor.begin()) {
         Serial.println("ERROR: TCS34725 not found!");
         lcd.clear();
         lcd.print("SENSOR ERROR!");
-        while (1);  // Halt
+        while (1);  
     }
     
     Serial.println("TCS34725 Color Sensor Ready");
@@ -67,7 +67,7 @@ void loop() {
 
 
 void detectSkinColor() {
-    // Read raw RGB + Clear values
+
     uint16_t r, g, b, c;
     colorSensor.getRawData(&r, &g, &b, &c);
     
@@ -76,7 +76,7 @@ void detectSkinColor() {
     float norm_g = (float)g / c * 255;
     float norm_b = (float)b / c * 255;
     
-    // Ensure values are within 0-255
+    
     norm_r = constrain(norm_r, 0, 255);
     norm_g = constrain(norm_g, 0, 255);
     norm_b = constrain(norm_b, 0, 255);
@@ -86,13 +86,13 @@ void detectSkinColor() {
     uint8_t final_b = (uint8_t)norm_b;
         SkinTone detected = classifySkinTone(final_r, final_g, final_b);
     
-    // Get full tone data
+    
     SkinToneData toneData = getSkinToneData(detected, final_r, final_g, final_b);
     
-    // Display results
+   
     displayResults(toneData);
     
-    // Serial output
+    
     printSerialData(toneData);
 }
 
@@ -108,7 +108,7 @@ SkinTone classifySkinTone(uint8_t r, uint8_t g, uint8_t b) {
     float saturation = (max_val == 0) ? 0 : 
                        ((float)(max_val - min_val) / max_val);
     
-    // Calculate red and yellow dominance
+  
     float redness = r / 255.0;
     float yellowness = (r + g) / 2.0 / 255.0;
     
@@ -190,13 +190,13 @@ void rgbToHsv(uint8_t r, uint8_t g, uint8_t b,
     float min_val = min(rf, min(gf, bf));
     float delta = max_val - min_val;
     
-    // Value (Brightness)
+    
     v = max_val;
     
-    // Saturation
+    
     s = (max_val == 0) ? 0 : (delta / max_val);
     
-    // Hue (0-360°)
+  
     if (delta == 0) {
         h = 0;
     } 
